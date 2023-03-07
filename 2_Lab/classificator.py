@@ -1,6 +1,6 @@
 import numpy as np
 from scipy.stats import norm
-from sklearn.decomposition import PCA
+
 
 
 class Classificator:
@@ -48,19 +48,3 @@ class Classificator:
         return x.dot(self._alpha) < self._c
 
 
-def PCA_method(x , n_components):
-    mean = np.mean(x, axis=0)
-    x_centered = x - mean
-    covariance = np.cov(x_centered.T)
-    eiges = np.linalg.eig(covariance)
-    values, vectors = eiges
-    eiges = sorted(zip(values, vectors.T), key=lambda x: x[0], reverse=True)
-    transform = np.vstack(list([eiges[i][1] for i in range(n_components)]))
-    x_new = x_centered @ transform.T
-    
-    # # values, vectors = np.linalg.eig(1/ len(x) * x.T @ x)
-    # # eiges = sorted(zip(values, vectors.T), key=lambda x: x[0], reverse=True)
-    
-    # pca = PCA(n_components=2)
-    # x_new = pca.fit_transform(x)
-    return x_new        
