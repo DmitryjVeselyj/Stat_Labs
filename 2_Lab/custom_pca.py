@@ -3,12 +3,8 @@ from sklearn.decomposition import PCA
 
     
 def calc_variance_ratio(x_new, x_old):
-    return np.diagonal(np.cov(x_new.T)) / sum(np.diagonal(np.cov(x_old.T)))
+    return sorted(np.diagonal(np.cov(x_new.T)) / np.trace(np.cov(x_old.T)), reverse=True)
 
-
-def get_optimal_n_componets(x_centered, values):
-    border = 1 / x_centered.shape[1] * np.trace(np.cov(x_centered.T))
-    return len(values[values > border])
 
 
 def PCA_method(x, n_components = None):
@@ -18,14 +14,16 @@ def PCA_method(x, n_components = None):
     eiges = sorted(zip(values, vectors.T), key=lambda x: x[0], reverse=True)
 
     if n_components is None:
-        n_components = get_optimal_n_componets(x_centered, values)        
+        border = 1 / x_centered.shape[1] * np.trace(covariance)
+        n_components = len(values[values > border])
+        print('n_components: ', n_components)       
     transform = np.vstack(list([eiges[i][1] for i in range(n_components)]))
     x_new = x_centered @ transform.T
 
     # # values, vectors = np.linalg.eig(1/ len(x) * x.T @ x)
     # # eiges = sorted(zip(values, vectors.T), key=lambda x: x[0], reverse=True)
     
-    # pca = PCA(n_components=2)
+    # pca = PCA(n_components=23)
     # x_new = pca.fit_transform(x)
     # print(pca.explained_variance_ratio_)
     return x_new        

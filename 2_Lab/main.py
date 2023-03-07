@@ -2,7 +2,7 @@ import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 from classificator import Classificator
-from custom_pca import PCA_method, calc_variance_ratio, get_optimal_n_componets
+from custom_pca import PCA_method, calc_variance_ratio
 from matplotlib import pyplot as plt
 np.random.seed(777)
 
@@ -43,12 +43,13 @@ if __name__ == '__main__':
     wrong_values_indx = np.where(np.not_equal(y_res, y_test))
 
     fig = plt.figure(figsize=(16,8))
-    ax1 = fig.add_subplot(1, 3, 1,projection='3d')
+    ax1 = fig.add_subplot(2, 2, 1,projection='3d')
     ax1.set_title('Классификатор')
     ax1.scatter(x_test[:, 0], x_test[:, 1], x_test[:, 2], color=['r' if i else 'b' for i in y_res])
 
-    ax2 = fig.add_subplot(1, 3, 2,projection='3d')
+    ax2 = fig.add_subplot(2, 2, 2,projection='3d')
     ax2.set_title('Реальность')
+    ax2.scatter(x_test[:, 0], x_test[:, 1], x_test[:, 2], color=['r' if i else 'b' for i in y_test])
     '''
     📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕 
     📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕 
@@ -76,13 +77,16 @@ if __name__ == '__main__':
     📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕 
     📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕 
     📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕 
-    📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕
+    📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕📒📕📘📘📕                                                                                                   
+
     '''
-    ax2.scatter(x_test[:, 0], x_test[:, 1], x_test[:, 2], color=['g' if np.isin(indx, wrong_values_indx) else ['r', 'b'][res] for indx, res in enumerate(y_res)])
-    ax2 = fig.add_subplot(1,3,3)
+    ax3 = fig.add_subplot(2,2,3,projection='3d')
+    ax3.set_title('Реальность(зелёным цветом показаны ошибочные классификации)')
+    ax3.scatter(x_test[:, 0], x_test[:, 1], x_test[:, 2], color=['g' if np.isin(indx, wrong_values_indx) else ['r', 'b'][res] for indx, res in enumerate(y_res)])
+    ax4 = fig.add_subplot(2,2,4)
     
     cm = confusion_matrix(y_test, y_res)
-    ConfusionMatrixDisplay(cm, display_labels=["1", "2"]).plot(ax = ax2)
+    ConfusionMatrixDisplay(cm, display_labels=["1", "2"]).plot(ax = ax4)
     print(f'm/n P(2|1): {cm[0][1] / (cm[0][0] + cm[0][1])}, P(1|2): {cm[1][0] / (cm[1][0] + cm[1][1])}')
     print(f'С помощью метрики и  P(2|1): {classificator.prob_2_1}, P(1|2): {classificator.prob_1_2}')
     plt.show()
