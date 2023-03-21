@@ -74,7 +74,6 @@ class SupportVectorClustering():
         self.svs_indx = np.where((self._beta < (self.C - EPS)) & (self._beta > EPS))[0]
         self.ovs_indx = np.where(self._beta < EPS)[0]
 
-        print(f'svs: {len(self.svs_indx)}  bsv: {len(self.bsv_indx)}')
         R = np.mean([self.r_func(self._x[i]) for i in self.svs_indx])
 
         adj_mtx = np.zeros((self._N, self._N))
@@ -116,11 +115,11 @@ class SupportVectorClustering():
     
 
     @staticmethod
-    def get_optimal_p(x):
+    def get_begin_p(x):
         return 1 / (len(x))
     
     @staticmethod
-    def get_optimal_q(x):
+    def get_begin_q(x):
         return 1 / max([np.linalg.norm(x[i] - x[j])**2 for i in range(len(x)) for j in range(len(x))])
    
     
