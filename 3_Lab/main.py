@@ -40,7 +40,7 @@ if __name__ == '__main__':
     svc = SVC(0.02, 0.1)
     svc.fit(x)
     clusters = svc.get_clusters()
-    print(np.nan_to_num(np.mean([]) - 12))
+
     print(f'NOT MY adj_rand: {adjusted_rand_score(y, convert_to_array(clusters))}, sil:{silhouette_score(x, convert_to_array(clusters))}')
     print(f'adj_rand: {adj_rand(convert_to_clusters(y), clusters)}, silhouette: {silhouette(clusters, x, euclidean)}')
 
